@@ -1,0 +1,68 @@
+: cascade "include/layout.tx"
+
+: override content -> {
+
+<div ng-controller="noteCtrl" class="content-wrap">
+    <button id="add-button" class="btn btn-default add-button center-block" ng-click="openNoteEditorNew()">Add</button>
+    <table id="note-table" class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Title</td>
+                <td>Last modified</td>
+                <td>Delete</td>
+                <td>Convert</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="note in notes">
+                <td><a href="" ng-click="openNoteEditor(note)" style="display:block; width:100%;">{{note.title}}</a></td>
+                <td><small>{{note.modified_at}}</small></td>
+                <td><a href="" ng-click="confirmDeleteNote(note)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                <td><a href="" ng-click="confirmConvertNote(note)"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- modal-note-editor -->
+    <div class="modal fade" id="modal-note-editor" tabindex="-1" role="dialog" aira-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Note</h4>
+                </div>
+                <div class="modal-body">
+                    Title: <br /><input type="text" id="note-title" ng-model="noteTitle" /><br />
+                    Text: <br />
+                    <textarea id="note-text" ng-model="noteText"></textarea>
+                    <input type="hidden" ng-model="noteId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="addNote()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal-note-editor -->
+
+    <!-- modal-confirm -->
+    <div class="modal fade bs-example-modal-sm" id="modal-confirm" tabindex="-1" role="dialog" aira-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {{confirmText}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="confirm-submit-button" type="button" class="btn btn-primary" ng-click="submitConfirm()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal-confirm -->
+
+</div>
+
+: }

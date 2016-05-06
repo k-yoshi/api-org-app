@@ -1,0 +1,75 @@
+: cascade "include/layout.tx"
+
+: override content -> {
+
+<div ng-controller="todoCtrl" class="content-wrap">
+    <button id="add-button" class="btn btn-default add-button center-block" ng-click="openTodoEditorNew()">Add</button>
+    <table id="todo-table" class="table table-striped">
+        <thead>
+            <tr>
+                <td>Done</td>
+                <td>Title</td>
+                <td>Last modified</td>
+                <td>Delete</td>
+                <td>Convert</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="todo in todos">
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-checked="todo.done" ng-click="changeTodoDone($event, todo)" />
+                        </label>
+                    </div>
+                </td>
+                <td><a href="" ng-click="openTodoEditor(todo)" style="display:block; width:100%;">{{todo.title}}</a></td>
+                <td><small>{{todo.modified_at}}</small></td>
+                <td><a href="" ng-click="confirmDeleteTodo(todo)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                <td><a href="" ng-click="confirmConvertTodo(todo)"><span class="glyphicon glyphicon-transfer" aria-hidden="true"></span></a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- modal-todo-editor -->
+    <div class="modal fade" id="modal-todo-editor" tabindex="-1" role="dialog" aira-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Todo</h4>
+                </div>
+                <div class="modal-body">
+                    Todo: <br /><input type="text" id="todo-title" ng-model="todoTitle" /><br />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="addTodo()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal-todo-editor -->
+
+    <!-- modal-confirm -->
+    <div class="modal fade bs-example-modal-sm" id="modal-confirm" tabindex="-1" role="dialog" aira-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {{confirmText}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button id="confirm-submit-button" type="button" class="btn btn-primary" ng-click="submitConfirm()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal-confirm -->
+
+</div>
+
+
+: }
+

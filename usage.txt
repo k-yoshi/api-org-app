@@ -1,0 +1,6 @@
+* Prepare
+    * carton install
+    * sqlite3 db/development.db < sql/sqlite.sql
+* Start server
+    * carton exec perl script/noteandtodo-server
+

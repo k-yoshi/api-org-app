@@ -1,0 +1,63 @@
+<!doctype html>
+<html ng-app="ntApp">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title><: $title || 'NoteAndTodo' :></title>
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <script src="<: uri_for('/static/js/jquery-2.1.1.min.js') :>"></script>
+    <link href="<: uri_for('/static/bootstrap/css/bootstrap.css') :>" rel="stylesheet" type="text/css" />
+    <script src="<: uri_for('/static/bootstrap/js/bootstrap.js') :>"></script>
+    <script src="<: uri_for('/static/js/es5-shim.min.js') :>"></script>
+    <script src="<: uri_for('/static/js/micro_template.js') :>"></script>
+    <script src="<: uri_for('/static/js/strftime.js') :>"></script>
+    <script src="<: uri_for('/static/js/sprintf.js') :>"></script>
+    <script src="<: uri_for('/static/js/micro-location.js') :>"></script>
+    <script src="<: uri_for('/static/js/micro_dispatcher.js') :>"></script>
+    <script src="<: uri_for('/static/js/xsrf-token.js') :>"></script>
+    <script src="<: uri_for('/static/js/vendor/angular.js') :>"></script>
+    <script src="<: uri_for('/static/js/vendor/angular-route.min.js') :>"></script>
+    <script src="<: uri_for('/static/js/nt-app.js') :>"></script>
+    <script src="<: uri_for('/static/js/nt-controllers.js') :>"></script>
+    <link href="<: static_file('/static/css/main.css') :>" rel="stylesheet" type="text/css" media="screen" />
+    <script src="<: static_file('/static/js/main.js') :>"></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="<: uri_for('/') :>">NoteAndTodo</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav-menu-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="nav-menu-1">
+                <ul class="nav navbar-nav">
+                    <li class="<: to_active_nav('home', $active) :>"><a href="<: uri_for('/') :>">Home</a></li>
+                    <li class="<: to_active_nav('note', $active) :>"><a href="<: uri_for('/note') :>">Note</a></li>
+                    <li class="<: to_active_nav('todo', $active) :>"><a href="<: uri_for('/todo') :>">TODO</a></li>
+                </ul>
+            </div>
+        </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+    <div class="container-fluid">
+        <div id="main">
+            <: block content -> { } :>
+        </div>
+        <!--
+        <footer class="footer">
+            Powered by <a href="http://amon.64p.org/">Amon2</a>
+        </footer>
+        -->
+    </div>
+</body>
+</html>
