@@ -4,3 +4,38 @@
 * Start server
     * carton exec perl script/noteandtodo-server
 
+* API
+  * GET /api/note/list
+    * returns JSON array of all notes' hash
+    * columns included: id, title, modified_at
+  * GET /api/note/:id
+    * returns JSON hash of a note specified by :id
+    * columns included: id, title, text, modified_at
+  * POST /api/note/add
+    * add a note
+    * params
+      * title: string
+      * text: string
+  * POST /api/note/:id/update
+    * update a note specified by :id
+    * params
+      * title: string
+      * text: string
+  * POST /api/note/:id/delete
+    * delete a note specified by :id
+  * GET /api/todo/list
+    * returns JSON array of all TODOs' hash
+    * columns included: id, title, done, modified_at
+      * done: 0 = undone / 1 = done
+  * POST /api/todo/add
+    * add a TODO
+    * params
+      * title: string
+  * POST /api/todo/:id/update
+    * update a TODO specified by :id
+    * params
+      * title: string
+      * done: int 0 or 1
+      * noTimestamp: (default:0) if specified 1, API desn't update modified_at
+  * POST /api/todo/:id/delete
+    * delete a todo specified by :id

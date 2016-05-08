@@ -142,7 +142,6 @@ sub update_todo {
         title => $c->req->param('title'),
         done => $c->req->param('done'),
     };
-    print $c->req->param('noTimestamp');
     if(!$c->req->param('noTimestamp')) {
         $update_data->{modified_at} = _sqlite_now();
     }
