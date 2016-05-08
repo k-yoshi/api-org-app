@@ -5,6 +5,7 @@ use utf8;
 
 use JSON;
 use POSIX 'strftime';
+use Log::Minimal;
 
 my $TYPE_NOTE = 1;
 my $TYPE_TODO = 2;
@@ -13,9 +14,16 @@ sub note_list {
     my ($self, $c) = @_;
 
     my $schema = $c->db;
-    my @notes = $schema->resultset('Item')->search({type=>$TYPE_NOTE}, {order_by=>{-desc=>'modified_at'}});
+    my @notes = $schema->resultset('Item')->search(
+        {type=>$TYPE_NOTE},
+        {
+            order_by=>{-desc=>'modified_at'},
+            select=>['id','title','modified_at'],
+        }
+    );
 
-    my @notes_arr = _items_to_array(@notes);
+    my @columns = qw/id title modified_at/;
+    my @notes_arr = _items_to_array(\@notes, \@columns);
 
     my $json_text = encode_json(\@notes_arr);
     return $c->create_response(200, [], $json_text);
@@ -25,9 +33,13 @@ sub note_detail {
     my ($self, $c, $args) = @_;
     my $note_id = $args->{id};
 
-    my $note = $c->db->resultset('Item')->find({id=>$note_id});
+    my $note = $c->db->resultset('Item')->find(
+        {id=>$note_id},
+        {select=>['id','title','text','modified_at']}
+    );
 
-    my $note_hashref = _item_to_hashref($note);
+    my @columns = qw/id title text modified_at/;
+    my $note_hashref = _item_to_hashref($note, \@columns);
 
     my $json_text = encode_json($note_hashref);
     return $c->create_response(200, [], $json_text);
@@ -84,9 +96,16 @@ sub convert_note_to_todo {
 sub todo_list {
     my ($self, $c) = @_;
 
-    my @todos = $c->db->resultset('Item')->search({type=>$TYPE_TODO}, {order_by=>{-desc=>'modified_at'}});
+    my @todos = $c->db->resultset('Item')->search(
+        {type=>$TYPE_TODO},
+        {
+            order_by=>{-desc=>'modified_at'},
+            select=>['id','title','done','modified_at'],
+        }
+    );
 
-    my @todos_arr = _items_to_array(@todos);
+    my @columns = qw/id title done modified_at/;
+    my @todos_arr = _items_to_array(\@todos, \@columns);
 
     my $json_text = encode_json(\@todos_arr);
     return $c->create_response(200, [], $json_text);
@@ -125,15 +144,9 @@ sub update_todo {
     };
     print $c->req->param('noTimestamp');
     if(!$c->req->param('noTimestamp')) {
-        #modified_at => _sqlite_now(),
         $update_data->{modified_at} = _sqlite_now();
     }
 
-#    $c->db->resultset('Item')->find({id=>$todo_id})->update({
-#        title => $c->req->param('title'),
-#        done => $c->req->param('done'),
-#        modified_at => _sqlite_now(),
-#    });
     $c->db->resultset('Item')->find({id=>$todo_id})->update($update_data);
 
     return $c->create_response(200, [], '');
@@ -152,26 +165,32 @@ sub convert_todo_to_note {
 }
 
 sub _items_to_array {
-    my (@items) = @_;
+    my ($items, $columns) = @_;
 
     my @items_arr = map {
-        _item_to_hashref($_);
-    } @items;
+        _item_to_hashref($_, $columns);
+    } @$items;
 
     return @items_arr;
 }
 
 sub _item_to_hashref {
-    my ($item) = @_;
+    my ($item, $columns) = @_;
 
-    my $item_hashref = +{
-        id => $item->id,
-        type => $item->type,
-        title => $item->title,
-        text => $item->text,
-        done => $item->done,
-        modified_at => $item->modified_at,
-    };
+    my $item_hashref = +{};
+
+    for my $column (@$columns) {
+        $item_hashref->{$column} = $item->get_column($column);
+    }
+
+#    my $item_hashref = +{
+#        id => $item->id,
+#        type => $item->type,
+#        title => $item->get_column('title'),
+#        text => $item->text,
+#        done => $item->done,
+#        modified_at => $item->modified_at,
+#    };
 
     return $item_hashref;
 }

@@ -17,6 +17,7 @@ requires 'perl', '5.010_001';
 
 requires 'DBIx::Class';
 requires 'DBIx::Class::Helper::Row::ToJSON', '== 2.023007';
+requires 'Log::Minimal';
 
 on configure => sub {
     requires 'Module::Build', '0.38';

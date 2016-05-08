@@ -18,10 +18,12 @@ ntApp.controller('noteCtrl', function($scope, $http, $compile){
     };
 
     $scope.openNoteEditor = function(note){
-        $scope.noteId = note.id;
-        $scope.noteTitle = note.title;
-        $scope.noteText = note.text;
-        $('#modal-note-editor').modal();
+        $http.get('/api/note/'+note.id).success(function(data){
+            $scope.noteId = data.id;
+            $scope.noteTitle = data.title;
+            $scope.noteText = data.text;
+            $('#modal-note-editor').modal();
+        });
     };
 
     $scope.addNote = function() {
